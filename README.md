@@ -1,20 +1,25 @@
-  String Р41 = "";
-                            try {
-                                Р41=getString(row, 65);
-                                if (Р41!=null && Р41!="") {
-                                    String[] Р41s = Р41.split("[.]");
-                                    int len = Р41s.length;
-                                    if (len== 2 && Р41s[1].equals("0") )
-                                    {
-                                        Р41 = Р41.split("[.]")[0];
-                                    }
-                                }
-                            }
-                            catch (Exception e)
-                            {
+ public static BigDecimal getBigDecimal(Row row, int index,int scale) {
 
-                            }
-                            if (Р41!=null && Р41!="")
-                            {
-                                r4obespech.setР41(getString(row, 65));
-                            }
+
+        try {
+
+            if (row.getCell(index).getCellType() == CellType.STRING) {
+                var value =row.getCell(index).getStringCellValue();
+                if(Objects.equals(value, "-"))
+                {
+                    value="0.0000";
+                }
+                return BigDecimal.valueOf(Double.valueOf(value)).setScale(scale, RoundingMode.HALF_UP);
+            } else if (row.getCell(index).getCellType() == CellType.NUMERIC) {
+                Double valDouble = row.getCell(index).getNumericCellValue();
+                return BigDecimal.valueOf(valDouble).setScale(scale, RoundingMode.HALF_UP);
+            }
+
+
+        } catch (Exception e) {
+
+
+        }
+        return null;
+
+    }
